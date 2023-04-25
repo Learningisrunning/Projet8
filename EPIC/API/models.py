@@ -2,11 +2,12 @@ from django.db import models
 
 # Create your models here.
 
-class Sales(models.Model):
+class Sale(models.Model):
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
 
-    __str__ = first_name + "." + last_name
+    def __str__(self):
+        return self.first_name + " " + self.last_name
 
 class Client(models.Model):
     first_name = models.CharField(max_length=25)
@@ -17,16 +18,20 @@ class Client(models.Model):
     company_name = models.CharField(max_length=250)
     date_created = models.DateField()
     date_update = models.DateField()
-    sales_contact = models.ForeignKey(Sales, on_delete=models.SET_NULL)
+    sales_contact = models.ForeignKey(Sale, on_delete=models.CASCADE)
 
-    __str__ = first_name + "." + last_name
+    def __str__(self): 
+        return self.first_name + " " + self.last_name
 
-class ClientsExistants(Client):
-    
-    __str__ = Client.first_name
+class ClientsExistant(Client):
 
-class ClientPotentiels(Client):
-    __str__ = Client.first_name
+    def __str__(self):
+        return self.first_name + " " + self.last_name
+
+class ClientPotentiel(Client):
+
+   def __str__(self):
+       return self.first_name + " " + self.last_name
 
 class Contract(models.Model):
     date_created = models.DateField()
@@ -34,17 +39,19 @@ class Contract(models.Model):
     status = models.BooleanField()
     amount = models.FloatField()
     payment_due = models.DateField()
-    sales_contact = models.ForeignKey(Sales, on_delete=models.CASCADE)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    sales_contact = models.ForeignKey(Sale, on_delete=models.CASCADE)
+    client = models.ForeignKey(ClientsExistant, on_delete=models.CASCADE)
 
-    __str__ = sales_contact + "    " + client
+    def __str__(self):
+        return self.sales_contact.first_name + "    " + self.client.first_name
 
 class Support(models.Model):
 
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
 
-    __str__ = first_name + "." + last_name
+    def __str__(self):
+        return self.first_name + " " + self.last_name
 
 class Event(models.Model):
 
@@ -53,12 +60,13 @@ class Event(models.Model):
     attendees = models.IntegerField()
     event_date = models.DateField()
     note = models.CharField(max_length=350)
-    client = models.ForeignKey(Client)
-    support_contact = models.ForeignKey(Support)
-    event_status = models.ForeignKey(Contract.status)
+    client = models.ForeignKey(ClientsExistant, on_delete=models.CASCADE)
+    support_contact = models.ForeignKey(Support, on_delete=models.CASCADE)
+    event_status = models.ForeignKey(Contract, on_delete=models.CASCADE)
 
 
-    __str__ = client + "  " + event_date + "  " + support_contact
+    def __str__(self):
+        return self.client.first_name + "  " + str(self.event_date) + "  " + self.support_contact.first_name
 
 
 
