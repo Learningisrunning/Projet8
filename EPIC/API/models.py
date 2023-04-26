@@ -55,7 +55,7 @@ class Support(models.Model):
 
     first_name = models.CharField(max_length=25)
     last_name = models.CharField(max_length=25)
-    user_sale = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_support')
+    user_support = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_support')
     
     def __str__(self):
         return self.first_name + " " + self.last_name
@@ -69,7 +69,7 @@ class Event(models.Model):
     note = models.CharField(max_length=350)
     client = models.ForeignKey(ClientsExistant, on_delete=models.CASCADE, related_name='client_event')
     support_contact = models.ForeignKey(Support, on_delete=models.CASCADE, related_name='support_contact')
-    event_status = models.ForeignKey(Contract, on_delete=models.CASCADE, related_name='event_status')
+    event_status = models.ForeignKey(Contract, on_delete=models.CASCADE, related_name='event_contract')
 
 
     def __str__(self):
