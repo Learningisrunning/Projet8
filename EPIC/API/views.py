@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
+from rest_framework import filters
 from API.serializers import SaleListSerializer, ClientExistantsListSerializer, ClientPotentielListSerializer, ContractListSerializer, EventListSerializer, SupportListSerializer
 from API.serializers import SaleDetailSerializer, ClientExistantsDetailSerializer, ContractDetailSerializer, EventDetailsSerializer
 from API.models import Sale, ClientPotentiel, ClientsExistant, Event, Contract, Support
@@ -8,6 +9,7 @@ from API.models import Sale, ClientPotentiel, ClientsExistant, Event, Contract, 
 class SalesViewtSet(ModelViewSet):
     serializer_class = SaleListSerializer
     detail_serializer_class = SaleDetailSerializer
+
 
     def get_queryset(self):
         return Sale.objects.all()
@@ -19,6 +21,9 @@ class SalesViewtSet(ModelViewSet):
     
 class ClientsPotentielsViewtSet(ModelViewSet):
     serializer_class = ClientPotentielListSerializer
+    search_fields = ['last_name', 'email']
+    filter_backends = (filters.SearchFilter,)
+    
 
     def get_queryset(self):
         return ClientPotentiel.objects.all()
@@ -26,6 +31,9 @@ class ClientsPotentielsViewtSet(ModelViewSet):
 class ClientsExistantsViewtSet(ModelViewSet):
     serializer_class = ClientExistantsListSerializer
     detail_serializer_class = ClientExistantsDetailSerializer
+    search_fields = ['last_name', 'email']
+    filter_backends = (filters.SearchFilter,)
+    
 
     def get_queryset(self):
         return ClientsExistant.objects.all()
@@ -38,6 +46,8 @@ class ClientsExistantsViewtSet(ModelViewSet):
 class ContractViewtSet(ModelViewSet):
     serializer_class = ContractListSerializer
     detail_serializer_class = ContractDetailSerializer
+    search_fields = ['client__last_name', 'client__email', 'date_created', 'amount']
+    filter_backends = (filters.SearchFilter,)
 
     def get_queryset(self):
         return Contract.objects.all()
@@ -49,6 +59,8 @@ class ContractViewtSet(ModelViewSet):
 class EventViewtSet(ModelViewSet):
     serializer_class = EventListSerializer
     detail_serializer_class = EventDetailsSerializer
+    search_fields = ['client__last_name', 'client__email', 'date_created']
+    filter_backends = (filters.SearchFilter,)
 
     def get_queryset(self):
         return Event.objects.all()

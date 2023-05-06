@@ -11,6 +11,10 @@ from API.models import ClientPotentiel, ClientsExistant, Event, Support, Sale, C
 #admin.site.register(Contract)
 admin.site.register(User)
 
+
+
+         
+    
 @admin.register(ClientPotentiel)
 class ClientPotentielAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name','company_name', 'sales_contact')
@@ -26,7 +30,7 @@ class ClientPotentielAdmin(admin.ModelAdmin):
               if sale.user_sale_id == request.user.id:
                     user_involve = sale
                     break
-        
+
          qs = super().get_queryset(request)
    
          if request.user.is_superuser:
@@ -47,17 +51,17 @@ class ClientsExistantsAdmin(admin.ModelAdmin):
         user_involve_support = ""
         sales = Sale.objects.all()
         supports = Support.objects.all()
-         
+
         for sale in sales:
               if sale.user_sale_id == request.user.id:
                     user_involve_sale = sale
                     break
-        
+
         for support in supports:
               if support.user_support_id == request.user.id:
                     user_involve_support = support
                     break
-         
+
         events = Event.objects.filter(support_contact=user_involve_support)
 
         list_of_client = []
