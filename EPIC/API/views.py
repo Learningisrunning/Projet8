@@ -1,6 +1,6 @@
-from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import filters
+from rest_framework.permissions import IsAuthenticated
 from API.serializers import SaleListSerializer, ClientExistantsListSerializer, ClientPotentielListSerializer, ContractListSerializer, EventListSerializer, SupportListSerializer
 from API.serializers import SaleDetailSerializer, ClientExistantsDetailSerializer, ContractDetailSerializer, EventDetailsSerializer
 from API.models import Sale, ClientPotentiel, ClientsExistant, Event, Contract, Support
@@ -9,7 +9,7 @@ from API.models import Sale, ClientPotentiel, ClientsExistant, Event, Contract, 
 class SalesViewtSet(ModelViewSet):
     serializer_class = SaleListSerializer
     detail_serializer_class = SaleDetailSerializer
-
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Sale.objects.all()
@@ -21,6 +21,7 @@ class SalesViewtSet(ModelViewSet):
     
 class ClientsPotentielsViewtSet(ModelViewSet):
     serializer_class = ClientPotentielListSerializer
+    permission_classes = [IsAuthenticated]
     search_fields = ['last_name', 'email']
     filter_backends = (filters.SearchFilter,)
     
@@ -31,6 +32,7 @@ class ClientsPotentielsViewtSet(ModelViewSet):
 class ClientsExistantsViewtSet(ModelViewSet):
     serializer_class = ClientExistantsListSerializer
     detail_serializer_class = ClientExistantsDetailSerializer
+    permission_classes = [IsAuthenticated]
     search_fields = ['last_name', 'email']
     filter_backends = (filters.SearchFilter,)
     
@@ -46,6 +48,7 @@ class ClientsExistantsViewtSet(ModelViewSet):
 class ContractViewtSet(ModelViewSet):
     serializer_class = ContractListSerializer
     detail_serializer_class = ContractDetailSerializer
+    permission_classes = [IsAuthenticated]
     search_fields = ['client__last_name', 'client__email', 'date_created', 'amount']
     filter_backends = (filters.SearchFilter,)
 
@@ -59,6 +62,7 @@ class ContractViewtSet(ModelViewSet):
 class EventViewtSet(ModelViewSet):
     serializer_class = EventListSerializer
     detail_serializer_class = EventDetailsSerializer
+    permission_classes = [IsAuthenticated]
     search_fields = ['client__last_name', 'client__email', 'date_created']
     filter_backends = (filters.SearchFilter,)
 
@@ -72,6 +76,7 @@ class EventViewtSet(ModelViewSet):
     
 class SupportViewtSet(ModelViewSet):
     serializer_class = SupportListSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Support.objects.all()
