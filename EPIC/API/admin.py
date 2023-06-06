@@ -26,12 +26,14 @@ class ClientPotentielAdmin(admin.ModelAdmin):
          user_involve = ""
          sales = Sale.objects.all()
 
+         qs = super().get_queryset(request)
+         
          for sale in sales:
               if sale.user_sale_id == request.user.id:
                     user_involve = sale
                     break
 
-         qs = super().get_queryset(request)
+         
    
          if request.user.is_superuser:
               return qs
@@ -51,6 +53,7 @@ class ClientsExistantsAdmin(admin.ModelAdmin):
         user_involve_support = ""
         sales = Sale.objects.all()
         supports = Support.objects.all()
+        qs = super().get_queryset(request)
 
         for sale in sales:
               if sale.user_sale_id == request.user.id:
@@ -60,15 +63,13 @@ class ClientsExistantsAdmin(admin.ModelAdmin):
         for support in supports:
               if support.user_support_id == request.user.id:
                     user_involve_support = support
+                    events = Event.objects.filter(support_contact=user_involve_support)
+                    list_of_client = []
+                    for event in events:
+                         list_of_client.append(event.client_id)
                     break
-
-        events = Event.objects.filter(support_contact=user_involve_support)
-
-        list_of_client = []
-        for event in events:
-             list_of_client.append(event.client_id)
         
-        qs = super().get_queryset(request)
+       
 
         if request.user.is_superuser:
               return qs
@@ -88,17 +89,17 @@ class EventAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
          user_involve = ""
          supports = Support.objects.all()
-
+         qs = super().get_queryset(request)
          for support in supports:
               if support.user_support_id == request.user.id:
                     user_involve = support
                     break
-        
-         qs = super().get_queryset(request)
+
   
          if request.user.is_superuser:
               return qs
          return qs.filter(support_contact = user_involve)
+
 
 @admin.register(Support)
 class SupportAdmin(admin.ModelAdmin):
