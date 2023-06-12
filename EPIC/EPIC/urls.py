@@ -23,33 +23,34 @@ from rest_framework_nested import routers
 router_sales = routers.SimpleRouter()
 router_sales.register('sales', SalesViewtSet, basename='sales')
 
-#router clients potentiels
-router_clients_potentiels = routers.NestedSimpleRouter(router_sales, r'sales', lookup = 'sales')
-router_clients_potentiels.register(r'clients-potentiels', ClientsPotentielsViewtSet, basename='clients-potentiels')
+#router suppport
+router_support = routers.SimpleRouter()
+router_support.register('supports', SupportViewtSet, basename='support')
 
 #router clients existants
-router_clients_existants = routers.NestedSimpleRouter(router_sales, r'sales', lookup = 'sales')
-router_clients_existants.register(r'clientsExistants', ClientsExistantsViewtSet, basename='clients-existants')
+router_clients_existants = routers.SimpleRouter()
+router_clients_existants.register('clientsExistants', ClientsExistantsViewtSet, basename='clientsExistants')
+
+#router clients potentiels
+router_clients_potentiels = routers.SimpleRouter()
+router_clients_potentiels.register('clientsPotentiels', ClientsPotentielsViewtSet, basename='clientsPotentiels')
 
 #router contract
-router_contract = routers.NestedSimpleRouter(router_clients_existants, r'clientsExistants', lookup = 'clientsExistants')
-router_contract.register(r'contracts', ContractViewtSet, basename='contracts')
+router_contract = routers.SimpleRouter()
+router_contract.register('contracts', ContractViewtSet, basename='contracts')
 
 #router event
-router_event = routers.NestedSimpleRouter(router_contract, r'contracts', lookup = 'contracts')
-router_event.register(r'event', EventViewtSet, basename='event')
+router_event = routers.SimpleRouter()
+router_event.register('events', EventViewtSet, basename='events')
 
-#router suppport
-router_support = routers.NestedSimpleRouter(router_event, r'event', lookup = 'event')
-router_support.register(r'support', SupportViewtSet, basename='support')
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router_sales.urls)),
+    path('api/', include(router_support.urls)),
     path('api/', include(router_clients_potentiels.urls)),
     path('api/', include(router_clients_existants.urls)),
     path('api/', include(router_contract.urls)),
     path('api/', include(router_event.urls)),
-    path('api/', include(router_support.urls)),
 ]
